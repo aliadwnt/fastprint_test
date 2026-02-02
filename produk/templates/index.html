@@ -1,21 +1,87 @@
-<h2>Produk Bisa Dijual</h2>
+<script src="https://cdn.tailwindcss.com"></script>
 
-<a href="/produk/sync-api/">Sync API</a> |
-<a href="/produk/tambah/">Tambah</a>
+<body class="min-h-screen bg-slate-100">
 
-<table border="1">
-<tr>
-  <th>Nama</th><th>Harga</th><th>Aksi</th>
-</tr>
-{% for p in produk %}
-<tr>
-  <td>{{ p.nama_produk }}</td>
-  <td>{{ p.harga }}</td>
-  <td>
-    <a href="/produk/edit/{{ p.id }}/">Edit</a>
-    <a href="/produk/hapus/{{ p.id }}/"
-       onclick="return confirm('Yakin hapus?')">Hapus</a>
-  </td>
-</tr>
-{% endfor %}
-</table>
+  <div class="max-w-6xl mx-auto py-12">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+      <div>
+        <h2 class="text-3xl font-bold text-gray-800">
+          Produk Bisa Dijual
+        </h2>
+        <p class="text-sm text-gray-500 mt-1">
+          Daftar produk dengan status tersedia untuk dijual
+        </p>
+      </div>
+
+      <div class="mt-4 sm:mt-0 flex gap-2">
+        <a href="/produk/sync-api/"
+           class="inline-flex items-center px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium
+                  hover:bg-emerald-700 transition">
+          Sync API
+        </a>
+
+        <a href="/produk/tambah/"
+           class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium
+                  hover:bg-blue-700 transition">
+          Tambah Produk
+        </a>
+      </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="bg-white rounded-xl shadow overflow-hidden">
+
+      <table class="w-full">
+        <thead class="bg-slate-50 border-b">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">
+              Nama Produk
+            </th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">
+              Harga
+            </th>
+            <th class="px-6 py-3 text-center text-sm font-semibold text-gray-600">
+              Aksi
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y">
+          {% for p in produk %}
+          <tr class="hover:bg-slate-50 transition">
+            <td class="px-6 py-4 font-medium text-gray-800">
+              {{ p.nama_produk }}
+            </td>
+            <td class="px-6 py-4 text-gray-700">
+              Rp {{ p.harga }}
+            </td>
+            <td class="px-6 py-4 text-center space-x-3">
+              <a href="/produk/edit/{{ p.id }}/"
+                 class="text-blue-600 hover:text-blue-800 font-medium">
+                Edit
+              </a>
+              <a href="/produk/hapus/{{ p.id }}/"
+                 onclick="return confirm('Yakin hapus?')"
+                 class="text-red-600 hover:text-red-800 font-medium">
+                Hapus
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="py-10 text-center text-gray-400">
+              Tidak ada produk bisa dijual
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</body>
