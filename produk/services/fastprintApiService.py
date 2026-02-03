@@ -10,7 +10,7 @@ def fetch_fastprint_products():
     response = requests.get(
         url,
         headers={
-            "username": "tesprogrammer020226C22",
+            "username": "tesprogrammer040226C01",
             "password": password
         }
     )

@@ -1,0 +1,10 @@
+# Environment
+.env
+.venv
+venv/
+*$py.class
+*.log
+local_settings.py
+__pycache__/
+.vscode/
+.idea/
