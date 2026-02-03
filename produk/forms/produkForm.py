@@ -4,15 +4,18 @@ from produk.models import Produk
 class ProdukForm(forms.ModelForm):
     class Meta:
         model = Produk
-        fields = '__all__'
-
-    def clean_nama_produk(self):
-        if not self.cleaned_data['nama_produk']:
-            raise forms.ValidationError("Nama produk wajib diisi")
-        return self.cleaned_data['nama_produk']
-
-    def clean_harga(self):
-        harga = self.cleaned_data['harga']
-        if harga <= 0:
-            raise forms.ValidationError("Harga harus angka")
-        return harga
+        fields = "__all__"
+        widgets = {
+            'nama_produk': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+            }),
+            'harga': forms.NumberInput(attrs={
+                'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+            }),
+            'kategori': forms.Select(attrs={
+                'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+            }),
+            'status': forms.Select(attrs={
+                'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'
+            }),
+        }

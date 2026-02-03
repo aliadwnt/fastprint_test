@@ -3,8 +3,9 @@ import hashlib
 from datetime import datetime
 from django.conf import settings
 
+
 def fetch_produk_api():
-    url = "https://recruitment.fastprint.co.id/tes/api_tes_programmer"
+    url = settings.FASTPRINT_API_URL
 
     today = datetime.now()
     raw_password = (
@@ -21,10 +22,12 @@ def fetch_produk_api():
         "password": password
     }
 
-    response = requests.post(url, data=payload)
+    response = requests.post(url, data=payload, timeout=10)
+    response.raise_for_status()
+
     data = response.json()
 
     if data.get("error") == 1:
         raise Exception(f"FastPrint API Error: {data.get('ket')}")
 
-    return data["data"]
+    return data.get("data", [])

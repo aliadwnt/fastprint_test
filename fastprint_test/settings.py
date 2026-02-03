@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(dotenv_path=BASE_DIR / ".env")
 
+FASTPRINT_API_URL = os.getenv("FASTPRINT_API_URL")
 FASTPRINT_USERNAME = os.getenv("FASTPRINT_USERNAME")
 FASTPRINT_PASSWORD_PREFIX = os.getenv("FASTPRINT_PASSWORD_PREFIX")
 
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'produk'
 ]
 

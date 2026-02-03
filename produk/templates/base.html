@@ -1,15 +1,40 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>{% block title %}FastPrint{% endblock %}</title>
+
+  <!-- Google Font: Poppins -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+
+  {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-gray-100">
+
+<body class="bg-gray-100 font-sans text-gray-800 min-h-screen">
 
   {% block content %}{% endblock %}
 
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

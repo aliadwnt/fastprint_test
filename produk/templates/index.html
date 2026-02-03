@@ -1,35 +1,23 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <body class="min-h-screen bg-slate-100">
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Daftar Produk{% endblock %}
 
+{% block content %}
   <div class="max-w-6xl mx-auto py-12">
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
       <div>
         <h2 class="text-3xl font-bold text-gray-800">
-          Produk Bisa Dijual
+          Daftar Produk
         </h2>
         <p class="text-sm text-gray-500 mt-1">
-          Daftar produk dengan status tersedia untuk dijual
+          Kelola Produk
         </p>
       </div>
-
-      <div class="mt-4 sm:mt-0 flex gap-2">
-        <a href="/produk/sync-api/"
-           class="inline-flex items-center px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium
-                  hover:bg-emerald-700 transition">
-          Sync API
-        </a>
-
-        <a href="/produk/tambah/"
-           class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium
-                  hover:bg-blue-700 transition">
-          Tambah Produk
-        </a>
-      </div>
     </div>
-
-    <div class="bg-white rounded-xl shadow overflow-hidden">
         <form method="get" class="mb-6" id="filterForm">
           <div class="flex flex-col sm:flex-row gap-4">
             <input
@@ -54,9 +42,24 @@
                 </option>
               {% endfor %}
             </select>
+            <div class="mt-4 sm:mt-0 flex gap-2">
+        <a href="/produk/sync-api/"
+           class="inline-flex items-center px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium
+                  hover:bg-emerald-700 transition">
+          Sync API
+        </a>
 
+        <a href="/produk/tambah/"
+           class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium
+                  hover:bg-blue-700 transition">
+          Tambah Produk
+        </a>
+      </div>
           </div>
+          
         </form>
+        
+    <div class="bg-white rounded-xl shadow overflow-hidden">
       <table class="w-full">
         <thead class="bg-slate-50 border-b">
           <tr>
@@ -67,6 +70,9 @@
               Harga
             </th>
             <th class="px-6 py-3 text-center text-sm font-semibold text-gray-600">
+              Status
+            </th>
+            <th class="px-6 py-3 text-center text-sm font-semibold text-gray-600">
               Aksi
             </th>
           </tr>
@@ -75,12 +81,39 @@
         <tbody class="divide-y">
           {% for p in produk %}
           <tr class="hover:bg-slate-50 transition">
-            <td class="px-6 py-4 font-medium text-gray-800">
+            <td class="px-4 py-2 text-gray-800">
               {{ p.nama_produk }}
             </td>
-            <td class="px-6 py-4 text-gray-700">
-              Rp {{ p.harga }}
+            <td class="px-4 py-2 text-gray-700">
+              Rp. {{ p.harga|intcomma }}
             </td>
+            <td class="px-4 py-2 text-center">
+            {% if p.status.id == 2 %}
+              <span class="px-3 py-1 text-xs font-semibold rounded-full
+                          bg-green-100 text-green-700">
+                Bisa Dijual
+              </span>
+
+            {% elif p.status.id == 1 %}
+              <span class="px-3 py-1 text-xs font-semibold rounded-full
+                          bg-red-100 text-red-700">
+                Terjual
+              </span>
+
+            {% elif p.status.id == 3 %}
+              <span class="px-3 py-1 text-xs font-semibold rounded-full
+                          bg-gray-100 text-gray-700">
+                Tidak Bisa Dijual
+              </span>
+
+            {% else %}
+              <span class="px-3 py-1 text-xs font-semibold rounded-full
+                          bg-yellow-100 text-yellow-700">
+                Unknown
+              </span>
+            {% endif %}
+          </td>
+
             <td class="px-6 py-4 text-center">
               <div class="flex items-center justify-center gap-4">
                 <a href="/produk/edit/{{ p.id }}/"
@@ -127,57 +160,57 @@
 
       </table>
       {% if produk.has_other_pages %}
-<div class="flex items-center justify-between px-6 py-4 border-t bg-slate-50">
+      <div class="flex items-center justify-between px-6 py-4 border-t bg-slate-50">
 
-  <p class="text-sm text-gray-600">
-    Halaman {{ produk.number }} dari {{ produk.paginator.num_pages }}
-  </p>
+        <p class="text-sm text-gray-600">
+          Halaman {{ produk.number }} dari {{ produk.paginator.num_pages }}
+        </p>
 
-  <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2">
 
-    {% if produk.has_previous %}
-<a href="?page={{ produk.previous_page_number }}&q={{ q }}&status={{ status }}"
-         class="px-3 py-1 rounded-md bg-white border text-sm hover:bg-slate-100">
-        Prev
-      </a>
-    {% else %}
-      <span class="px-3 py-1 rounded-md bg-gray-200 text-sm text-gray-400">
-        Prev
-      </span>
-    {% endif %}
+          {% if produk.has_previous %}
+            <a href="?page={{ produk.previous_page_number }}&q={{ q }}&status={{ status }}"
+              class="px-3 py-1 rounded-md bg-white border text-sm hover:bg-slate-100">
+              Prev
+            </a>
+          {% else %}
+            <span class="px-3 py-1 rounded-md bg-gray-200 text-sm text-gray-400">
+              Prev
+            </span>
+          {% endif %}
 
-    {% for num in produk.paginator.page_range %}
-      {% if produk.number == num %}
-        <span class="px-3 py-1 rounded-md bg-blue-600 text-white text-sm">
-          {{ num }}
-        </span>
-      {% else %}
-        <a href="?page={{ num }}&q={{ q }}&status={{ status }}"
-          class="px-3 py-1 rounded-md bg-white border text-sm hover:bg-slate-100">
-          {{ num }}
-        </a>
+          {% for num in produk.paginator.page_range %}
+            {% if produk.number == num %}
+              <span class="px-3 py-1 rounded-md bg-blue-600 text-white text-sm">
+                {{ num }}
+              </span>
+            {% else %}
+              <a href="?page={{ num }}&q={{ q }}&status={{ status }}"
+                class="px-3 py-1 rounded-md bg-white border text-sm hover:bg-slate-100">
+                {{ num }}
+              </a>
 
-      {% endif %}
-    {% endfor %}
+            {% endif %}
+          {% endfor %}
 
-    {% if produk.has_next %}
-      <a href="?page={{ produk.next_page_number }}&q={{ q }}&status={{ status }}"
-         class="px-3 py-1 rounded-md bg-white border text-sm hover:bg-slate-100">
-        Next
-      </a>
-    {% else %}
-      <span class="px-3 py-1 rounded-md bg-gray-200 text-sm text-gray-400">
-        Next
-      </span>
-    {% endif %}
+          {% if produk.has_next %}
+            <a href="?page={{ produk.next_page_number }}&q={{ q }}&status={{ status }}"
+              class="px-3 py-1 rounded-md bg-white border text-sm hover:bg-slate-100">
+              Next
+            </a>
+          {% else %}
+            <span class="px-3 py-1 rounded-md bg-gray-200 text-sm text-gray-400">
+              Next
+            </span>
+          {% endif %}
 
+    </div>
   </div>
-</div>
-{% endif %}
+  {% endif %}
 
 
     </div>
-
+  {% endblock %}
   </div>
 
 </body>
