@@ -1,21 +1,42 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
+from django.db.models import Q
+from django.db.models.functions import Lower
 
 from produk.models import Produk, Kategori, Status
 from produk.forms.produkForm import ProdukForm
 from produk.services.apiService import fetch_produk_api
 
+
 def index(request):
-    qs = Produk.objects.filter(
+    q = request.GET.get('q', '').strip()
+    status = request.GET.get('status', '').strip()
+
+    produk = Produk.objects.filter(
         status__nama_status__iexact="bisa dijual"
-    ).order_by("nama_produk")
+    )
 
-    paginator = Paginator(qs, 10)  # 10 data per halaman
-    page_number = request.GET.get("page")
-    produk = paginator.get_page(page_number)
+    if q:
+        produk = produk.annotate(
+            nama_lower=Lower('nama_produk')
+        ).filter(
+            nama_lower__contains=q.lower()
+        )
 
-    return render(request, "index.html", {
-        "produk": produk
+    if status:
+        produk = produk.filter(status__nama_status__iexact=status)
+
+    paginator = Paginator(produk, 10)
+    page_number = request.GET.get('page')
+    produk_page = paginator.get_page(page_number)
+
+    status_list = Status.objects.all()
+
+    return render(request, 'index.html', {
+        'produk': produk_page,
+        'status_list': status_list,
+        'q': q,
+        'status': status,
     })
 
 def create(request):

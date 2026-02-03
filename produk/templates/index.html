@@ -30,7 +30,33 @@
     </div>
 
     <div class="bg-white rounded-xl shadow overflow-hidden">
+        <form method="get" class="mb-6" id="filterForm">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <input
+              type="text"
+              name="q"
+              value="{{ q }}"
+              placeholder="Cari nama produk..."
+              class="w-full sm:w-1/2 px-4 py-2 border rounded-lg
+                    focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
 
+            <select
+              name="status"
+              onchange="this.form.submit()"
+              class="w-full sm:w-1/4 px-4 py-2 border rounded-lg
+                    focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <option value="">Semua Status</option>
+              {% for s in status_list %}
+                <option value="{{ s.nama_status }}"
+                  {% if status == s.nama_status %}selected{% endif %}>
+                  {{ s.nama_status }}
+                </option>
+              {% endfor %}
+            </select>
+
+          </div>
+        </form>
       <table class="w-full">
         <thead class="bg-slate-50 border-b">
           <tr>
@@ -110,7 +136,7 @@
   <div class="flex items-center gap-2">
 
     {% if produk.has_previous %}
-      <a href="?page={{ produk.previous_page_number }}"
+<a href="?page={{ produk.previous_page_number }}&q={{ q }}&status={{ status }}"
          class="px-3 py-1 rounded-md bg-white border text-sm hover:bg-slate-100">
         Prev
       </a>
@@ -126,15 +152,16 @@
           {{ num }}
         </span>
       {% else %}
-        <a href="?page={{ num }}"
-           class="px-3 py-1 rounded-md bg-white border text-sm hover:bg-slate-100">
+        <a href="?page={{ num }}&q={{ q }}&status={{ status }}"
+          class="px-3 py-1 rounded-md bg-white border text-sm hover:bg-slate-100">
           {{ num }}
         </a>
+
       {% endif %}
     {% endfor %}
 
     {% if produk.has_next %}
-      <a href="?page={{ produk.next_page_number }}"
+      <a href="?page={{ produk.next_page_number }}&q={{ q }}&status={{ status }}"
          class="px-3 py-1 rounded-md bg-white border text-sm hover:bg-slate-100">
         Next
       </a>
@@ -154,3 +181,14 @@
   </div>
 
 </body>
+<script>
+  let timer;
+  const searchInput = document.querySelector('input[name="q"]');
+
+  searchInput.addEventListener('keyup', function (e) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      this.form.submit();
+    }, 800); 
+  });
+</script>
