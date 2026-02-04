@@ -75,6 +75,7 @@ def delete(request, id):
     produk = get_object_or_404(Produk, id=id)
     produk.delete()
     return redirect("produk_index")
+
 def sync_api(request):
     data = fetch_produk_api()
 
