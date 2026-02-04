@@ -63,6 +63,6 @@ Tes Junior Programmer
 7. Untuk fitur tambah dan edit gunakan form validasi (inputan nama harus diisi, dan harga harus berupa inputan angka)
 
 8. Untuk fitur hapus beri alert/konfirmasi(confirm) ketika di klik hapus
-![Hapus](screenshots/alertHapus.png)
+![Hapus](./screenshots/alertHapus.png)
 ## Dokumentasi Video
 Youtube: https://youtu.be/i4O1iQ9efFM
